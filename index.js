@@ -63,10 +63,37 @@ app.post('/statistics/entity', (req, res) => {
 })
 
 app.post('/statistics/group', (req, res) => {
-  res.write('{\n"Create Group": "')
-  res.write((req.body['Create Group'] ? req.body['Create Group'] : 'Create Group is Missing') + '",\n')
-  res.write('"Create MemberOf Link": "')
-  res.write((req.body['Create MemberOf Link'] ? req.body['Create MemberOf Link'] : 'Create MemberOf Link is Missing') + '"\n}')
+  if (req.body['type']) {
+    if (req.body['type'] === 'Create') {
+      res.write('{\n"Create Group": "')
+      res.write((req.body['Create Group'] ? req.body['Create Group'] : 'Create Group is Missing') + '",\n')
+      res.write('"Create MemberOf Link": "')
+      res.write((req.body['Create MemberOf Link'] ? req.body['Create MemberOf Link'] : 'Create MemberOf Link is Missing') + '"\n}')
+    }
+    if (req.body['type'] === 'Delete') {
+      res.write('{\n"Delete MemberOf Link": "')
+      res.write((req.body['Delete MemberOf Link'] ? req.body['Delete MemberOf Link'] : 'Delete MemberOf Link is Missing') + '",\n')
+      res.write('"Delete Group": "')
+      res.write((req.body['Delete Group'] ? req.body['Delete Group'] : 'Delete Group is Missing') + '"\n}')
+    }
+
+    if (req.body['type'] !== 'Create' && req.body['type'] !== 'Delete') {
+      res.write('{\n"type": "type should be \'Create\' or \'Delete\' "\n}')
+    }
+  }
+  else {
+    res.write('{\n"type": "Missing \'type\'" \n}')
+  }
+  res.end()
+})
+
+app.post('/statistics/broker', (req, res) => {
+  res.write('{\n"Create APP": "')
+  res.write((req.body['Create APP'] ? req.body['Create APP'] : 'Create APP is Missing') + '",\n')
+  res.write('"Fetch CO2 Data Product": "')
+  res.write((req.body['Fetch CO2 Data Product'] ? req.body['Fetch CO2 Data Product'] : 'Fetch CO2 Data Product is Missing') + '",\n')
+  res.write('"Fetch Temperature Data Product": "')
+  res.write((req.body['Fetch Temperature Data Product'] ? req.body['Fetch Temperature Data Product'] : 'Fetch Temperature Data Product is Missing') + '"}\n')
 
   res.end()
 })
